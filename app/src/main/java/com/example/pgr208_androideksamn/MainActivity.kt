@@ -7,10 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.example.pgr208_androideksamn.ui.screens.anime_list.AnimeListScreen
 import com.example.pgr208_androideksamn.ui.theme.PGR208AndroidEksamnTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,10 +19,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             PGR208AndroidEksamnTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    AnimeApp(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -31,10 +27,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun AnimeApp(modifier: Modifier = Modifier) {
+    AnimeListScreen()
 }
 
