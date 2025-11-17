@@ -1,11 +1,11 @@
 package com.example.pgr208_androideksamn.screens.anime_list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -32,12 +32,14 @@ import com.example.pgr208_androideksamn.data.anime.Jpg
 @Composable
 fun AnimeItem(
     anime: Anime,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onAnimeClick: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp)
+            .clickable {onAnimeClick()}
             .shadow(
                 elevation = 4.dp,
                 shape = RoundedCornerShape(8.dp)

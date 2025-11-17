@@ -54,6 +54,28 @@ object AnimeRepository {
             return emptyList()
         }
     }
+
+
+    suspend fun getAnimeById(id: Int): Anime? {
+        try {
+            val response = animeService.getAnimeById(id)
+
+            if (response.isSuccessful) {
+                return response.body()?.data
+            } else {
+                Log.e(
+                    "AnimeRepository",
+                    "Unsuccessful response for ID $id. Code: ${response.code()}"
+                )
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("AnimeRepository", "Exception when getting anime by ID $id: ${e.message}")
+            return null
+        }
+    }
 }
+
+
 
 

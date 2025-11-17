@@ -9,6 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.pgr208_androideksamn.navigation.AnimeIdeas
+import com.example.pgr208_androideksamn.navigation.AnimeList
+import com.example.pgr208_androideksamn.navigation.AnimeSearch
+import com.example.pgr208_androideksamn.navigation.BottomNavigationBar
 import com.example.pgr208_androideksamn.ui.screens.anime_list.AnimeListScreen
 import com.example.pgr208_androideksamn.ui.theme.PGR208AndroidEksamnTheme
 
@@ -18,16 +25,39 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PGR208AndroidEksamnTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    AnimeApp(modifier = Modifier.padding(innerPadding))
+
+                val navController = rememberNavController()
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = { BottomNavigationBar(navController = navController) }
+                ) { innerPadding ->
+
+                    NavHost(
+                        navController = navController,
+                        startDestination = AnimeList,
+                        modifier = Modifier.padding(innerPadding)
+                    ) {
+                        composable<AnimeList> {
+                            AnimeListScreen(
+                                onAnimeClick = { }
+                            )
+                        }
+
+                        composable<AnimeSearch> {
+
+                        }
+
+
+                        composable<AnimeIdeas> {
+
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-@Composable
-fun AnimeApp(modifier: Modifier = Modifier) {
-    AnimeListScreen()
-}
+
 
