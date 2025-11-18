@@ -1,6 +1,9 @@
 package com.example.pgr208_androideksamn.data.anime
 
+import android.content.Context
 import android.util.Log
+import androidx.room.Room
+import com.example.pgr208_androideksamn.data.room.AppDatabase
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -30,7 +33,21 @@ object AnimeRepository {
             .build()
 
     //Lager en instans av AnimeService som bruker retrofit for å lage API-kall
-    private val animeService = retrofit.create(AnimeService::class.java)
+    private val _animeService = retrofit.create(AnimeService::class.java)
+
+    private lateinit var _appDatabase: AppDatabase
+
+    private val _animeDao by lazy {
+        _appDatabase.animeDao()
+    }
+
+    fun initialize(context: Context) {
+        _appDatabase = Room.databaseBuilder(
+            context = context,
+            klass = AppDatabase::class.java,
+            name = "anime_database"
+        ).build()
+    }
 
 
     //Funksjon som henter listen med alle animer fra API-et
@@ -38,43 +55,31 @@ object AnimeRepository {
         //try-catch-blokken håndterer feil ved kall til API
         try {
             //Kaller funksjonen fra AnimeService som henter listen med anime-objekter
-            val response = animeService.getAllAnimes()
+            val response = _animeService.getAllAnimes()
 
             //Sjekker om kall var vellykket og returnerer listen med anime-objekter
             if (response.isSuccessful) {
                 //Hvis kall var vellykket, returnerer vi listen med anime-objekter fra responsen
-                return response.body()?.data ?: emptyList()
+                val animesFromApi = response.body()?.data ?: emptyList()
+
+                _animeDao.insertAnime(animesFromApi)
+
+                return _animeDao.getAllAnimes()
             } else {
                 //Hvis kall var ikke vellykket, loggres feilmeldingen og en tom liste returneres
-                Log.e("AnimeRepository", "Unsuccessful response. Code: ${response.code()}")
-                return emptyList()
+                throw Exception("Unsuccessful response from API. Code: ${response.code()}")
             }
         } catch (e: Exception) {
-            Log.e("AnimeRepository", "Exception (e.g., no network): ${e.message}")
-            return emptyList()
+            Log.e("AnimeRepository", "Failed to refresh animes: ${e.message}", e)
+            return _animeDao.getAllAnimes()
         }
     }
 
-
-    suspend fun getAnimeById(id: Int): Anime? {
-        try {
-            val response = animeService.getAnimeById(id)
-
-            if (response.isSuccessful) {
-                return response.body()?.data
-            } else {
-                Log.e(
-                    "AnimeRepository",
-                    "Unsuccessful response for ID $id. Code: ${response.code()}"
-                )
-                return null
-            }
-        } catch (e: Exception) {
-            Log.e("AnimeRepository", "Exception when getting anime by ID $id: ${e.message}")
-            return null
-        }
+    suspend fun getAnimeByIdFromDb(id: Int): Anime? {
+        return _animeDao.getAnimeById(id)
     }
 }
+
 
 
 

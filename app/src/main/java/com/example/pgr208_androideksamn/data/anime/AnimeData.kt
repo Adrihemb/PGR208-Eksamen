@@ -1,12 +1,15 @@
 package com.example.pgr208_androideksamn.data.anime
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 
-
+@Entity(tableName = "anime")
 data class Anime(
     //@SerializedName("mal_id") forteller Gson hvordan den skal oversette fra JSON
     //JSON-feltet med verdien "mal_id" gjør vi til variabelen "id" i koden vår
+    @PrimaryKey
     @SerializedName("mal_id")
     val id: Int,
 

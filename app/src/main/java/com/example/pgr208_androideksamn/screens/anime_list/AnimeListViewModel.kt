@@ -1,4 +1,4 @@
-package com.example.pgr208_androideksamn.ui.screens.anime_list
+package com.example.pgr208_androideksamn.screens.anime_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,19 +20,31 @@ class AnimeListViewModel : ViewModel() {
 
     val animeList: StateFlow<List<Anime>> = _animeList.asStateFlow()
 
-    init {
-        fetchAnimes()
-    }
+    private val _error = MutableStateFlow<String?>(null)
 
-    private fun fetchAnimes() {
+    val error: StateFlow<String?> = _error.asStateFlow()
+
+
+
+
+    fun fetchAnimes() {
         viewModelScope.launch {
 
-            _loading.value = true
+            if (!_loading.value)
 
-            val animes = AnimeRepository.getAllAnimes()
-            _animeList.value = animes
+            try {
+                _loading.value = true
+                _error.value = null
 
-            _loading.value = false
+                val animes = AnimeRepository.getAllAnimes()
+                _animeList.value = animes
+            }
+            catch (e: Exception) {
+                _error.value = e.message ?: "Unknown error"
+            }
+            finally {
+                _loading.value = false
+            }
         }
     }
 }
