@@ -66,7 +66,7 @@ object AnimeRepository {
 
                 return _animeDao.getAllAnimes()
             } else {
-                //Hvis kall var ikke vellykket, loggres feilmeldingen og en tom liste returneres
+                //Hvis kall ikke var vellykket, loggres feilmeldingen og en tom liste returneres
                 throw Exception("Unsuccessful response from API. Code: ${response.code()}")
             }
         } catch (e: Exception) {
