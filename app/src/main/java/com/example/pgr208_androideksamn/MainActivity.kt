@@ -1,5 +1,6 @@
 package com.example.pgr208_androideksamn
 
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +20,10 @@ import com.example.pgr208_androideksamn.navigation.BottomNavigationBar
 import com.example.pgr208_androideksamn.screens.anime_list.AnimeListScreen
 import com.example.pgr208_androideksamn.screens.anime_search.AnimeSearchScreen
 import com.example.pgr208_androideksamn.ui.theme.PGR208AndroidEksamnTheme
+import com.example.pgr208_androideksamn.data.anime.AnimeIdeaRepository
+import com.example.pgr208_androideksamn.screens.anime_ideas.AnimeIdeasScreen
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +31,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         AnimeRepository.initialize(this)
+        AnimeIdeaRepository.initialize(this)
 
         setContent {
             PGR208AndroidEksamnTheme {
@@ -63,7 +69,7 @@ class MainActivity : ComponentActivity() {
 
                             //Når NavController navigerer til AnimeIdeas, vises AnimeIdeasScreen
                             composable<AnimeIdeas> {
-
+                                AnimeIdeasScreen()
                             }
                         }
                         //Kaller vår egen Composable-funksjon BottomNavigationBar
@@ -77,6 +83,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+
 
 
 
