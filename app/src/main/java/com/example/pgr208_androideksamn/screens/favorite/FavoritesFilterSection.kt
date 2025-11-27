@@ -21,7 +21,7 @@ fun FavoritesFilterSection(
         Slider(
             value = minScore,
             onValueChange = { newValue ->
-                // Rund av til nærmeste halvdel
+                // Runder av til nærmeste halvdel
                 val rounded = (newValue * 2).toInt() / 2f
                 onMinScoreChange(rounded)
             },
